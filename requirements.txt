@@ -1,0 +1,14 @@
+langchain>=1.0.0
+langchain-core>=1.0.0
+langchain-openai>=1.0.0
+openai>=1.0.0
+python-dotenv>=1.0.0
+requests>=2.31.0
+pydantic>=2.0.0
+langsmith>=0.1.0  # Required for UUID v7 support
+
+# Optional: For full MCP integration (if available)
+# langchain-mcp-adapters>=0.1.0
+# mcp>=0.1.0
+# mcp-meteo>=0.1.0  # MCP server for weather using Open-Meteo
+
