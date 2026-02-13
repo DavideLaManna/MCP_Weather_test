@@ -1,75 +1,60 @@
-# MCP Weather Test Chatbot
+# MCP Weather Chatbot
 
-This is an isolated test project to demonstrate MCP (Model Context Protocol) server integration with LangChain.
+Demonstrates MCP (Model Context Protocol) server integration with LangChain using the official MCP Python SDK and `langchain-mcp-adapters`. Weather data comes from Open-Meteo (free, no API key).
 
-## Overview
+## Architecture
 
-This project includes:
-1. A simple weather MCP server that provides weather forecasts
-2. An MCP client to connect to the server
-3. A test chatbot that uses the weather tool via LangChain
+```
+server/weather.py   MCP server (stdio) - get_weather_by_city, get_forecast_by_city
+chatbot.py          Interactive chatbot - connects via stdio, uses load_mcp_tools
+run_example.py      Single-query example
+```
+
+Flow: `StdioServerParameters` -> `stdio_client` -> `ClientSession` -> `load_mcp_tools` -> LangChain agent.
 
 ## Setup
 
-1. Install dependencies:
 ```bash
 pip install -r requirements.txt
 ```
 
-2. Set up your OpenWeatherMap API key (free at https://openweathermap.org/api):
+Create `.env` with:
+
+```
+OPENAI_API_KEY=your_openai_key
+```
+
+No weather API key is needed; Open-Meteo is used.
+
+## Running
+
+**Interactive chatbot:**
+
 ```bash
-export OPENWEATHERMAP_API_KEY=your_api_key_here
+python chatbot.py
 ```
 
-Or create a `.env` file:
-```
-OPENWEATHERMAP_API_KEY=your_api_key_here
-OPENAI_API_KEY=your_openai_key_here
-```
+**Single-query example:**
 
-## Running the Components
-
-### Option 1: Run MCP Server and Chatbot Separately
-
-1. Start the MCP server:
 ```bash
-python mcp_weather_server.py
+python run_example.py
 ```
 
-2. In another terminal, run the chatbot:
+**Run MCP server alone** (for debugging):
+
 ```bash
-python test_chatbot.py
+python server/weather.py
 ```
 
-### Option 2: Run Integrated Test (Recommended)
+## Tools
 
-Run the integrated test that starts everything together:
-```bash
-python integrated_test.py
-```
+| Tool                  | Description                            |
+|-----------------------|----------------------------------------|
+| `get_weather_by_city` | Current weather for a city             |
+| `get_forecast_by_city`| Multi-day forecast (1–7 days)           |
 
-### Option 3: Test with External MCP Server (Open-Meteo)
+## Troubleshooting
 
-Test the chatbot with external MCP server using Open-Meteo API (free, no API key needed):
-```bash
-python test_mcp_server_integration.py
-```
+**OPENAI_API_KEY not found** – Add it to `.env`.
 
-Or run the interactive chatbot:
-```bash
-python test_chatbot_with_mcp_server.py
-```
-
-## Architecture
-
-- **mcp_weather_server.py**: Simple MCP server that provides weather tools (using OpenWeatherMap)
-- **test_chatbot.py**: Test chatbot using LangChain with custom MCP weather tool
-- **test_chatbot_with_mcp_server.py**: Test chatbot using external MCP server (mcp-meteo compatible, using Open-Meteo API)
-- **test_mcp_server_integration.py**: Test script for external MCP server integration
-- **mcp_client_example.py**: Example showing MCP client integration patterns
-- **integrated_test.py**: All-in-one test script
-
-## Notes
-
-This is a proof-of-concept implementation for learning MCP integration with LangChain. The weather server uses OpenWeatherMap's free API tier.
-
+**MCP connection errors** – Ensure `server/weather.py` runs correctly on its own.
