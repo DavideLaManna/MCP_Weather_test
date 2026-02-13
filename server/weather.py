@@ -150,4 +150,8 @@ def get_forecast_by_city(city: str, days: int = 7) -> str:
 
 
 if __name__ == "__main__":
-    mcp.run(transport="stdio")
+    import sys
+    if "--http" in sys.argv:
+        mcp.run(transport="streamable-http")
+    else:
+        mcp.run(transport="stdio")

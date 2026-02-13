@@ -24,8 +24,6 @@ Create `.env` with:
 OPENAI_API_KEY=your_openai_key
 ```
 
-No weather API key is needed; Open-Meteo is used.
-
 ## Running
 
 **Interactive chatbot:**
@@ -46,12 +44,46 @@ python run_example.py
 python server/weather.py
 ```
 
+## MCP Inspector UI
+
+Use the [MCP Inspector](https://modelcontextprotocol.io/docs/tools/inspector) to test tools and debug the server.
+
+### Option 1: stdio
+
+1. Install Node.js (for `npx`), then run:
+
+```bash
+npx -y @modelcontextprotocol/inspector
+```
+
+2. In the Inspector: add a new server, choose **Standard I/O**
+3. Set **Command**: `python`
+4. Set **Arguments**: `server/weather.py`
+5. Set **Working directory** to the project root
+6. Connect and use the Tools tab to call `get_weather_by_city` and `get_forecast_by_city`
+
+### Option 2: HTTP
+
+1. Start the server with HTTP transport:
+
+```bash
+python server/weather.py --http
+```
+
+2. In another terminal, run the Inspector:
+
+```bash
+npx -y @modelcontextprotocol/inspector
+```
+
+3. Add a server with URL: `http://localhost:8000/mcp`
+
 ## Tools
 
-| Tool                  | Description                            |
-|-----------------------|----------------------------------------|
-| `get_weather_by_city` | Current weather for a city             |
-| `get_forecast_by_city`| Multi-day forecast (1–7 days)           |
+| Tool                     | Description                    |
+| ------------------------ | ------------------------------ |
+| `get_weather_by_city`  | Current weather for a city     |
+| `get_forecast_by_city` | Multi-day forecast (1–7 days) |
 
 ## Troubleshooting
 
